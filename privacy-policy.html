@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Table Copy</title>
+    <style>
+        /* CSS Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f7;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .privacy-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #1a73e8;
+            margin-bottom: 10px;
+            border-bottom: 3px solid #1a73e8;
+            padding-bottom: 10px;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        section p {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+
+        section ul {
+            margin-left: 25px;
+            margin-bottom: 12px;
+        }
+
+        section li {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        section li strong {
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        .accept-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .accept-button {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .accept-button:hover {
+            background-color: #0d47a1;
+            transform: translateY(-2px);
+        }
+
+        .accept-button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            .privacy-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            section h2 {
+                font-size: 18px;
+            }
+
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HTML Content -->
+    <div class="privacy-container">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last updated: November 2024</p>
+
+        <section>
+            <h2>1. Introduction</h2>
+            <p>Table Copy is a Chrome extension that helps you copy HTML tables from any webpage and export them to various formats (CSV, Excel, JSON, Markdown, Google Sheets). We value your privacy and are committed to protecting your personal data.</p>
+        </section>
+
+        <section>
+            <h2>2. Data Collection</h2>
+            <p>Table Copy does NOT collect, store, or transmit any personal data. The extension uses local browser storage only to save your preferences (e.g., export format, language)</p>
+        </section>
+
+        <section>
+            <h2>3. Permissions</h2>
+            <p>Table Copy requests the following permissions:</p>
+            <ul>
+                <li><strong>activeTab</strong> - To access the current page content and extract tables</li>
+                <li><strong>scripting</strong> - To inject copy functionality into tables</li>
+                <li><strong>clipboardWrite</strong> - To copy table data to clipboard</li>
+                <li><strong>storage</strong> - To remember your export preferences</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Third-Party Services</h2>
+            <p>Table Copy does not use any third-party analytics, tracking, or advertisement services. All operations are performed locally in your browser.</p>
+        </section>
+
+        <section>
+            <h2>5. Content Security</h2>
+            <p>The extension operates entirely within your browser sandbox. No data about the websites you visit is stored, collected, or sent outside your computer.</p>
+        </section>
+
+        <section>
+            <h2>6. Updates</h2>
+            <p>We may update this privacy policy as needed to reflect changes in our practices. We will notify users of any significant changes.</p>
+        </section>
+
+        <section>
+            <h2>7. Contact</h2>
+            <p>If you have any questions about this privacy policy, please contact us at:</p>
+            <p><strong>Email:</strong> support@example.com</p>
+            <p><strong>Website:</strong> https://github.com/username/table-copy</p>
+        </section>
+
+        <div class="accept-section">
+            <button id="acceptBtn" class="accept-button">I agree to the privacy policy</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const acceptButton = document.getElementById('acceptBtn');
+
+            acceptButton.addEventListener('click', function() {
+                // Save privacy agreement to Chrome storage
+                if (chrome && chrome.storage && chrome.storage.local) {
+                    chrome.storage.local.set({
+                        privacyAgreed: true,
+                        privacyAgreedDate: new Date().toISOString()
+                    }, function() {
+                        if (chrome.runtime.lastError) {
+                            console.error('Error saving privacy agreement:', chrome.runtime.lastError);
+                        } else {
+                            console.log('Privacy policy accepted successfully');
+                        }
+                    });
+                }
+
+                // Show success message
+                acceptButton.textContent = '✓ Thank you!';
+                acceptButton.style.backgroundColor = '#34a853';
+                acceptButton.style.pointerEvents = 'none';
+
+                // Visual feedback
+                const container = document.querySelector('.privacy-container');
+                container.style.borderColor = '#34a853';
+                container.style.boxShadow = '0 4px 12px rgba(52, 168, 83, 0.2)';
+
+                // Optional: Open the extension after acceptance
+                setTimeout(function() {
+                    console.log('User has accepted privacy policy');
+                }, 500);
+            });
+
+            // Check if user has already agreed to privacy policy
+            if (chrome && chrome.storage && chrome.storage.local) {
+                chrome.storage.local.get(['privacyAgreed'], function(result) {
+                    if (result.privacyAgreed) {
+                        acceptButton.textContent = '✓ You have already agreed';
+                        acceptButton.style.backgroundColor = '#34a853';
+                        acceptButton.style.pointerEvents = 'none';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
