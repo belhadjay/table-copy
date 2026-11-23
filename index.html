@@ -3,26 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Table Copy - Chrome extension for copying HTML tables to CSV, Excel, JSON, Markdown, and Google Sheets. Free & Unlimited.">
-    <meta name="keywords" content="table copy, chrome extension, csv, excel, json, markdown, google sheets, table extractor, privacy policy">
-    <title>Table Copy - Free Table Extraction, Export & Privacy Policy</title>
+    <meta name="description" content="Table Copy - Instantly extract and copy HTML tables to CSV, Excel, JSON, Markdown & Google Sheets. Free & PRO Lifetime Access.">
+    <meta name="keywords" content="table copy, chrome extension, copy table to excel, csv export, table extractor, google sheets sync">
+    <title>Table Copy | Fast Web Table Extraction & PRO Export</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
         :root {
             --primary: #6366f1;
-            --primary-dark: #4f46e5;
+            --primary-hover: #4f46e5;
             --secondary: #8b5cf6;
             --accent: #ec4899;
-            --text: #f8fafc;
-            --bg-dark: #0f172a;
-            --bg-card: rgba(255, 255, 255, 0.05);
+            --gold: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.4);
+            --success: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --bg-dark: #0b0f19;
+            --bg-card: rgba(255, 255, 255, 0.04);
             --border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
-            --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --gradient-main: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            --gradient-pro: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
         }
 
         * {
@@ -33,9 +35,9 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-dark);
-            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
         }
@@ -43,7 +45,18 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 24px;
+        }
+
+        /* Ambient Background Glow */
+        .ambient-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Navbar */
@@ -52,7 +65,7 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(15, 23, 42, 0.9);
+            background: rgba(11, 15, 25, 0.85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
             z-index: 1000;
@@ -62,634 +75,768 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 20px;
+            height: 75px;
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text);
+            gap: 12px;
             text-decoration: none;
+            color: var(--text-main);
+            font-weight: 800;
+            font-size: 1.35rem;
         }
 
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient);
+        .logo-box {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-main);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
         }
 
-        .nav-links {
+        .logo-box svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .nav-menu {
             display: flex;
-            gap: 2rem;
+            gap: 28px;
             align-items: center;
         }
 
-        .nav-links a {
-            color: var(--text);
+        .nav-menu a {
+            color: var(--text-muted);
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
             font-size: 0.95rem;
+            font-weight: 600;
+            transition: 0.25s;
         }
 
-        .nav-links a:hover {
-            color: var(--primary);
+        .nav-menu a:hover {
+            color: var(--text-main);
         }
 
-        .nav-cta {
-            background: var(--gradient);
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            color: white;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .nav-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5);
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
+        .nav-actions {
             display: flex;
             align-items: center;
-            position: relative;
-            padding-top: 100px;
-            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #312e81, #1e40af);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            gap: 12px;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 4rem;
+        /* Buttons */
+        .btn {
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 11px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: none;
+        }
+
+        .btn-pro {
+            background: var(--gradient-pro);
+            color: white;
+            box-shadow: 0 4px 20px var(--gold-glow);
+            animation: pulse-glow 3s infinite;
+        }
+
+        .btn-pro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.6);
+        }
+
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 4px 20px var(--gold-glow); }
+            50% { box-shadow: 0 4px 35px rgba(245, 158, 11, 0.7); }
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            padding: 160px 0 100px;
+            overflow: hidden;
+            text-align: center;
         }
 
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            background: rgba(99, 102, 241, 0.2);
-            border: 1px solid rgba(99, 102, 241, 0.4);
-            padding: 0.5rem 1rem;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            color: #fbbf24;
+            padding: 6px 16px;
             border-radius: 50px;
-            font-size: 0.9rem;
-            color: #a5b4fc;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 24px;
         }
 
         .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 900;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.15;
+            max-width: 900px;
+            margin: 0 auto 24px;
+            letter-spacing: -1.5px;
         }
 
         .text-gradient {
-            background: var(--gradient);
+            background: var(--gradient-main);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero-subtitle {
-            font-size: 1.15rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 2rem;
-            line-height: 1.7;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto 40px;
         }
 
-        .cta-group {
+        .hero-ctas {
             display: flex;
-            gap: 1rem;
+            justify-content: center;
+            gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
+            margin-bottom: 50px;
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.6);
-        }
-
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.05);
+        /* Interactive Showcase Card */
+        .showcase-box {
+            max-width: 880px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
-            color: white;
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-3px);
-        }
-
-        /* Modern Card Visual */
-        .modern-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow);
+            padding: 30px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            text-align: left;
         }
 
-        .card-header-flex {
+        .showcase-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        .card-badge {
-            background: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            padding: 0.3rem 0.8rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
+        .demo-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
         }
 
-        .card-version {
-            color: rgba(255, 255, 255, 0.5);
+        .demo-table th {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px 16px;
+            text-align: left;
+            color: #cbd5e1;
             font-weight: 600;
         }
 
-        .card-stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1.5rem 0;
+        .demo-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #94a3b8;
         }
 
-        .stat-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            padding: 1rem;
-            border-radius: 12px;
-            text-align: center;
+        .demo-table tr:hover td {
+            background: rgba(99, 102, 241, 0.08);
+            color: white;
         }
 
-        .stat-box .num {
-            font-size: 1.3rem;
-            font-weight: 800;
-            color: #a5b4fc;
-        }
-
-        .stat-box .lbl {
+        .badge-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
+            font-weight: 700;
         }
 
-        /* Sections General */
+        /* Sections */
         .section {
-            padding: 6rem 0;
+            padding: 100px 0;
+            position: relative;
         }
 
         .section-header {
             text-align: center;
-            margin-bottom: 4rem;
+            max-width: 700px;
+            margin: 0 auto 60px;
         }
 
-        .section-badge {
-            display: inline-block;
-            background: rgba(99, 102, 241, 0.15);
+        .section-tag {
             color: var(--primary);
-            padding: 0.4rem 1.2rem;
-            border-radius: 50px;
             font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: inline-block;
+            margin-bottom: 12px;
         }
 
         .section-title {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 900;
-            margin-bottom: 1rem;
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
         }
 
+        /* Features Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem;
+            gap: 24px;
         }
 
-        .feature-item {
+        .feature-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 2.5rem 2rem;
-            transition: all 0.4s ease;
+            padding: 32px 28px;
+            transition: 0.3s;
         }
 
-        .feature-item:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+        .feature-card:hover {
+            transform: translateY(-6px);
             border-color: rgba(99, 102, 241, 0.4);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient);
-            border-radius: 16px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--gradient-main);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+            margin-bottom: 24px;
         }
 
-        .feature-item h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.75rem;
-            font-weight: 700;
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
         }
 
-        .feature-item p {
-            color: rgba(255, 255, 255, 0.6);
+        .feature-card p {
+            color: var(--text-muted);
             font-size: 0.95rem;
         }
 
-        /* Formats Grid */
-        .formats-grid {
+        /* PRICING TABLE (FREE VS PRO) */
+        .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            max-width: 950px;
+            margin: 0 auto;
         }
 
-        .format-box {
+        .pricing-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem 1.5rem;
-            text-align: center;
-            transition: all 0.3s ease;
+            border-radius: 24px;
+            padding: 44px 36px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .format-box:hover {
-            border-color: var(--primary);
-            transform: translateY(-5px);
+        .pricing-card.popular {
+            border: 2px solid #f59e0b;
+            background: rgba(245, 158, 11, 0.03);
+            box-shadow: 0 20px 50px rgba(245, 158, 11, 0.15);
         }
 
-        .format-box i {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .popular-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-pro);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            padding: 5px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        .format-box h4 {
+        .price-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .price-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .price-num {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 36px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+        }
+
+        .feature-list li i.fa-check {
+            color: var(--success);
             font-size: 1.1rem;
-            margin-bottom: 0.5rem;
         }
 
-        /* PRIVACY POLICY SECTION STYLES */
-        .privacy-section {
-            background: linear-gradient(180deg, var(--bg-dark) 0%, #172033 100%);
-            border-top: 1px solid var(--border);
-            padding: 6rem 0;
+        .feature-list li i.fa-xmark {
+            color: #64748b;
+            font-size: 1rem;
         }
 
-        .privacy-card-box {
-            background: rgba(255, 255, 255, 0.03);
+        /* PRIVACY POLICY SECTION (CLEAR & COMPLIANT) */
+        .privacy-box {
+            background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 2rem;
+            border-radius: 24px;
+            padding: 48px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .privacy-card-box h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
+        .privacy-item {
+            margin-bottom: 32px;
+        }
+
+        .privacy-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .privacy-item h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
             color: #a5b4fc;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 10px;
         }
 
-        .privacy-card-box p, .privacy-card-box li {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
+        .privacy-item p, .privacy-item li {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
         }
 
-        .privacy-card-box ul {
-            margin-left: 1.5rem;
-            margin-top: 0.5rem;
+        .privacy-item ul {
+            margin-left: 20px;
+            margin-top: 8px;
         }
 
-        .accept-button {
+        /* Contact Section */
+        .contact-box {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(236, 72, 153, 0.08) 100%);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 50px 30px;
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .mail-link {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            background: var(--gradient-success);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 1rem 2.5rem;
-            font-size: 1.1rem;
+            gap: 10px;
+            font-size: 1.35rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5rem;
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            color: white;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px 28px;
+            border-radius: 14px;
+            margin-top: 20px;
+            border: 1px solid var(--border);
+            transition: 0.25s;
         }
 
-        .accept-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5);
-        }
-
-        .accept-button.accepted {
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            color: #000;
-            cursor: default;
-            transform: none;
+        .mail-link:hover {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+            transform: scale(1.03);
         }
 
         /* Footer */
         .footer {
-            background: #090d16;
-            padding: 4rem 0 2rem;
             border-top: 1px solid var(--border);
-        }
-
-        .footer-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: rgba(255, 255, 255, 0.6);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        .footer-bottom {
-            border-top: 1px solid var(--border);
-            padding-top: 2rem;
+            padding: 40px 0;
             text-align: center;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            color: var(--text-muted);
         }
 
-        .footer-bottom a {
-            color: var(--primary);
+        .footer a {
+            color: var(--text-main);
             text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s;
         }
 
-        @media (max-width: 900px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            .cta-group {
-                justify-content: center;
-            }
+        .footer a:hover {
+            color: #6366f1;
+        }
+
+        /* Payment Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: #111827;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            max-width: 450px;
+            width: 100%;
+            padding: 36px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 850px) {
+            .nav-menu { display: none; }
+            .hero-title { font-size: 2.5rem; }
+            .showcase-box { overflow-x: auto; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Ambient Lighting -->
+    <div class="ambient-glow" style="top: 100px; left: -100px;"></div>
+    <div class="ambient-glow" style="top: 800px; right: -100px; background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%);"></div>
+
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <a href="#" class="logo">
-                <div class="logo-icon"><i class="fa-solid fa-table"></i></div>
+                <div class="logo-box">
+                    <svg viewBox="0 0 24 24"><path d="M4 3h16a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm0 4v4h6V7H4zm8 0v4h8V7h-8zm8 6h-8v6h8v-6zm-10 6v-6H4v6h6z"/></svg>
+                </div>
                 <span>Table Copy</span>
             </a>
-            <div class="nav-links">
+
+            <div class="nav-menu">
                 <a href="#features">Features</a>
-                <a href="#formats">Formats</a>
-                <a href="#privacy">Privacy Policy</a>
-                <a href="https://github.com/belhadjay/table-copy" target="_blank" class="nav-cta">
+                <a href="#pricing">Free vs PRO</a>
+                <a href="#privacy">Privacy</a>
+                <a href="#contact">Contact</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="btn btn-pro" onclick="openPaymentModal()">
+                    <i class="fa-solid fa-crown"></i> Get PRO
+                </button>
+                <a href="https://github.com/belhadjay/table-copy" target="_blank" class="btn btn-secondary">
                     <i class="fa-brands fa-github"></i> GitHub
                 </a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="container hero-grid">
-            <div class="hero-left">
-                <div class="hero-badge">
-                    <i class="fa-solid fa-bolt"></i>
-                    <span>Chrome Extension v1.0 • Free & Fast</span>
-                </div>
-                <h1 class="hero-title">
-                    Copy HTML Tables <span class="text-gradient">Like a Pro</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Extract tables from any webpage instantly. Export cleanly to Excel, CSV, JSON, Markdown, and Google Sheets with zero effort.
-                </p>
-                <div class="cta-group">
-                    <a href="https://github.com/belhadjay/table-copy" target="_blank" class="btn btn-primary">
-                        <i class="fa-brands fa-chrome"></i> Download Extension
-                    </a>
-                    <a href="#privacy" class="btn btn-outline">
-                        <i class="fa-solid fa-shield-halved"></i> Privacy Policy
-                    </a>
-                </div>
+        <div class="container">
+            <div class="hero-badge">
+                <i class="fa-solid fa-sparkles"></i> LIFETIME DEAL AVAILABLE • 100% SECURE
             </div>
-            <div class="hero-right">
-                <div class="modern-card">
-                    <div class="card-header-flex">
-                        <span class="card-badge">✓ Active & Ready</span>
-                        <span class="card-version">Manifest V3</span>
+            <h1 class="hero-title">
+                Copy Web Tables <span class="text-gradient">in Seconds</span>. Export Directly Anywhere.
+            </h1>
+            <p class="hero-subtitle">
+                Stop wasting hours retyping data. Instantly capture HTML tables from any page and export cleanly to Excel, CSV, JSON, Markdown, or Google Sheets.
+            </p>
+
+            <div class="hero-ctas">
+                <button class="btn btn-pro btn-lg" style="padding: 14px 28px; font-size: 1.05rem;" onclick="openPaymentModal()">
+                    <i class="fa-solid fa-bolt"></i> Get PRO Lifetime Access ($9)
+                </button>
+                <a href="#pricing" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.05rem;">
+                    <i class="fa-solid fa-download"></i> Use Free Version
+                </a>
+            </div>
+
+            <!-- Showcase Interactive Mockup -->
+            <div class="showcase-box">
+                <div class="showcase-bar">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="badge-live">LIVE EXTRACTOR</span>
+                        <span style="font-size:0.85rem; color:#94a3b8;">Detected: 1 Table on Page</span>
                     </div>
-                    <h3>Table Copy Tool</h3>
-                    <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.5rem;">
-                        The ultimate companion for researchers, developers, and data analysts.
-                    </p>
-                    <div class="card-stats-grid">
-                        <div class="stat-box">
-                            <div class="num">100%</div>
-                            <div class="lbl">Free & Secure</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="num">Local</div>
-                            <div class="lbl">Processing</div>
-                        </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-secondary" style="padding:6px 14px; font-size:0.8rem;" onclick="alert('Copied to Clipboard as TSV!')">
+                            <i class="fa-regular fa-copy"></i> Copy TSV
+                        </button>
+                        <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="alert('Downloading CSV file...')">
+                            <i class="fa-solid fa-download"></i> CSV
+                        </button>
                     </div>
                 </div>
+                <table class="demo-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Quarter</th>
+                            <th>Revenue</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Table Copy Pro</td>
+                            <td>Chrome Extension</td>
+                            <td>Q4 2024</td>
+                            <td>$14,250</td>
+                            <td><span style="color:#34d399;">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>Data Sync Cloud</td>
+                            <td>SaaS Tool</td>
+                            <td>Q4 2024</td>
+                            <td>$28,900</td>
+                            <td><span style="color:#34d399;">Active</span></td>
+                        </tr>
+                        <tr>
+                            <td>API Extraction</td>
+                            <td>Developer Tool</td>
+                            <td>Q4 2024</td>
+                            <td>$9,400</td>
+                            <td><span style="color:#fbbf24;">Pending</span></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
 
-    <!-- Features -->
+    <!-- Features Section -->
     <section id="features" class="section">
         <div class="container">
             <div class="section-header">
-                <span class="section-badge">Capabilities</span>
-                <h2 class="section-title">Built for Performance</h2>
+                <span class="section-tag">Powerhouse Utility</span>
+                <h2 class="section-title">Engineered for Rapid Workflow</h2>
+                <p style="color:var(--text-muted);">Extract raw tabular data directly into pristine formats without manual formatting.</p>
             </div>
+
             <div class="features-grid">
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-                    <h3>Auto Detection</h3>
-                    <p>Intelligently finds and targets HTML tables across any webpage with zero configuration needed.</p>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                    <h3>Smart Table Detection</h3>
+                    <p>Scans the webpage DOM dynamically and highlights all valid tables cleanly on hover.</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-card">
                     <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
-                    <h3>Instant Copy</h3>
-                    <p>Copy structured tables straight to your clipboard or download as formatted CSV/TSV instantly.</p>
+                    <h3>Instant Clipboard Copy</h3>
+                    <p>Paste clean table columns directly into Excel, Google Sheets, or Notion without misaligned cells.</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
-                    <h3>RTL & Multi-Lang</h3>
-                    <p>Full support for Arabic RTL layout and international character sets seamlessly.</p>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-language"></i></div>
+                    <h3>Full RTL & Arabic Support</h3>
+                    <p>Handles Arabic and international character encodings (UTF-8) flawlessly without broken text.</p>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon"><i class="fa-solid fa-shield-check"></i></div>
-                    <h3>Privacy Guaranteed</h3>
-                    <p>Zero tracking or third-party data collection. Operates fully inside your browser sandbox.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Formats -->
-    <section id="formats" class="section" style="background: rgba(255,255,255,0.01);">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-badge">Formats</span>
-                <h2 class="section-title">Export Anywhere You Want</h2>
-            </div>
-            <div class="formats-grid">
-                <div class="format-box">
-                    <i class="fa-solid fa-file-csv"></i>
-                    <h4>CSV</h4>
-                    <span>Spreadsheet</span>
-                </div>
-                <div class="format-box">
-                    <i class="fa-solid fa-file-excel"></i>
-                    <h4>Excel (XLSX)</h4>
-                    <span>Formatted</span>
-                </div>
-                <div class="format-box">
-                    <i class="fa-solid fa-table"></i>
-                    <h4>TSV</h4>
-                    <span>Tab-Separated</span>
-                </div>
-                <div class="format-box">
-                    <i class="fa-solid fa-code"></i>
-                    <h4>JSON</h4>
-                    <span>Developers</span>
-                </div>
-                <div class="format-box">
-                    <i class="fa-solid fa-file-lines"></i>
-                    <h4>Markdown</h4>
-                    <span>Docs & Notion</span>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h3>Private & Local Only</h3>
+                    <p>Executes entirely inside your browser sandbox. No servers, no tracking, zero data collected.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PRIVACY POLICY SECTION (GOOGLE COMPLIANT) -->
-    <section id="privacy" class="privacy-section">
+    <!-- Free vs PRO Comparison (Pricing) -->
+    <section id="pricing" class="section" style="background: rgba(255,255,255,0.01);">
         <div class="container">
             <div class="section-header">
-                <span class="section-badge" style="background: rgba(16, 185, 129, 0.2); color: #34d399; border-color: rgba(16, 185, 129, 0.4);">Official Document</span>
-                <h2 class="section-title">Privacy Policy</h2>
-                <p style="color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto;">
-                    Last updated: November 2024. Fully compliant with Google Chrome Web Store Developer Program Policies.
-                </p>
+                <span class="section-tag">Fair & Transparent</span>
+                <h2 class="section-title">Choose Your Workflow</h2>
+                <p style="color:var(--text-muted);">Use the Free plan forever, or unlock PRO for automated developer and analyst exports.</p>
             </div>
 
-            <div class="privacy-card-box">
-                <h3><i class="fa-solid fa-circle-info"></i> 1. Introduction & Overview</h3>
-                <p>Table Copy is a browser extension designed to help users copy and export HTML tables from web pages into various formats (CSV, Excel, JSON, Markdown, etc.). We respect your privacy and are fully committed to protecting any data within our scope of operation.</p>
+            <div class="pricing-grid">
+                <!-- FREE PLAN -->
+                <div class="pricing-card">
+                    <div>
+                        <h3 class="price-title">Free Plan</h3>
+                        <p class="price-desc">Essential tools for everyday web browsing and copying.</p>
+                        <div class="price-num">$0 <span class="price-period">/ forever</span></div>
+
+                        <ul class="feature-list">
+                            <li><i class="fa-solid fa-check"></i> Unlimited table detection</li>
+                            <li><i class="fa-solid fa-check"></i> 1-Click Copy to Clipboard (TSV)</li>
+                            <li><i class="fa-solid fa-check"></i> Standard CSV file download</li>
+                            <li><i class="fa-solid fa-check"></i> 100% Local browser processing</li>
+                            <li><i class="fa-solid fa-xmark"></i> Formatted Excel (.XLSX) Export</li>
+                            <li><i class="fa-solid fa-xmark"></i> JSON & Markdown formats</li>
+                            <li><i class="fa-solid fa-xmark"></i> Google Sheets Instant Sync</li>
+                        </ul>
+                    </div>
+
+                    <a href="https://github.com/belhadjay/table-copy" target="_blank" class="btn btn-secondary" style="width: 100%;">
+                        <i class="fa-brands fa-chrome"></i> Install Free Extension
+                    </a>
+                </div>
+
+                <!-- PRO LIFETIME -->
+                <div class="pricing-card popular">
+                    <div class="popular-badge"><i class="fa-solid fa-fire"></i> LIFETIME DEAL</div>
+                    <div>
+                        <h3 class="price-title">PRO Lifetime</h3>
+                        <p class="price-desc">Complete export toolkit for power users & analysts.</p>
+                        <div class="price-num">$9 <span class="price-period">/ one-time payment</span></div>
+
+                        <ul class="feature-list">
+                            <li><i class="fa-solid fa-check"></i> <strong>Everything in Free</strong></li>
+                            <li><i class="fa-solid fa-check"></i> <strong>Formatted Excel (.xlsx)</strong> export</li>
+                            <li><i class="fa-solid fa-check"></i> <strong>Clean JSON</strong> export for APIs & devs</li>
+                            <li><i class="fa-solid fa-check"></i> <strong>Markdown Tables</strong> for Notion & GitHub</li>
+                            <li><i class="fa-solid fa-check"></i> <strong>Google Sheets</strong> 1-Click Direct Sync</li>
+                            <li><i class="fa-solid fa-check"></i> Lifetime updates included</li>
+                            <li><i class="fa-solid fa-check"></i> Priority email support</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-pro" style="width: 100%; font-size:1.05rem;" onclick="openPaymentModal()">
+                        <i class="fa-solid fa-crown"></i> Buy PRO Lifetime ($9)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Policy Section (Clear & Google Compliant) -->
+    <section id="privacy" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Privacy & Security</span>
+                <h2 class="section-title">Official Privacy Policy</h2>
+                <p style="color:var(--text-muted);">Committed to absolute privacy. Compliant with Google Developer Program Policies.</p>
             </div>
 
-            <div class="privacy-card-box">
-                <h3><i class="fa-solid fa-ban"></i> 2. Zero Data Collection</h3>
-                <p>We believe your data belongs to you. Therefore:</p>
-                <ul>
-                    <li><strong>No Personal Information:</strong> We do NOT collect names, emails, passwords, or personal details.</li>
-                    <li><strong>No Browsing Tracking:</strong> We do NOT monitor, log, or transmit your web browsing history or visited URLs.</li>
-                    <li><strong>No Analytics/Ads:</strong> We do not use third-party analytics trackers, cookies, or ad networks.</li>
-                </ul>
-            </div>
+            <div class="privacy-box">
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-circle-check"></i> 1. Zero Data Collection</h3>
+                    <p>Table Copy does <strong>NOT</strong> collect, transmit, store, or sell any personal data. We do not track your browsing history, visited websites, cookies, or IP addresses. Everything stays 100% on your device.</p>
+                </div>
 
-            <div class="privacy-card-box">
-                <h3><i class="fa-solid fa-key"></i> 3. Permissions Explanation</h3>
-                <p>Table Copy requests only the minimum necessary permissions required for its functionality:</p>
-                <ul>
-                    <li><code>activeTab</code> — To read and extract table elements directly from the currently active web page upon your request.</li>
-                    <li><code>scripting</code> — To inject table extraction logic securely into the active tab.</li>
-                    <li><code>clipboardWrite</code> — To copy the processed table data to your system clipboard.</li>
-                    <li><code>storage</code> — To save your personal export preferences locally on your browser device.</li>
-                </ul>
-            </div>
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-key"></i> 2. Chrome Permissions Justification</h3>
+                    <p>The extension requests only minimal permissions required to extract tables:</p>
+                    <ul>
+                        <li><code>activeTab</code>: Accesses the current web page only when you open the extension to parse visible tables.</li>
+                        <li><code>scripting</code>: Executes local JavaScript to highlight and format table cells for export.</li>
+                        <li><code>clipboardWrite</code>: Copies the formatted table data directly to your system clipboard.</li>
+                        <li><code>storage</code>: Remembers your preferred export format (CSV/Excel) locally inside Chrome.</li>
+                    </ul>
+                </div>
 
-            <div class="privacy-card-box">
-                <h3><i class="fa-solid fa-laptop-code"></i> 4. Local Processing Sandbox</h3>
-                <p>All extraction, parsing, and formatting are performed locally inside your browser sandbox. Your data never leaves your device and is never sent to any external server or third-party database.</p>
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-shield-cat"></i> 3. Client-Side Sandbox</h3>
+                    <p>All processing algorithms execute entirely in your local browser environment. No table data is ever transmitted over network connections to our servers or third-party analytical vendors.</p>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="privacy-card-box" style="text-align: center; background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);">
-                <h3><i class="fa-solid fa-circle-check" style="color: #34d399;"></i> User Consent & Agreement</h3>
-                <p>By using Table Copy, you acknowledge and agree to this Privacy Policy.</p>
-                <button class="accept-button" id="acceptBtn">
-                    <i class="fa-solid fa-check"></i> I Agree to Privacy Policy
-                </button>
+    <!-- Contact & Support Section -->
+    <section id="contact" class="section" style="padding-top: 20px;">
+        <div class="container">
+            <div class="contact-box">
+                <h2 style="font-size:2rem; font-weight:800; margin-bottom:12px;">Need Help or Feature Requests?</h2>
+                <p style="color:var(--text-muted);">Our team responds within 24 hours to all questions, inquiries, and custom requests.</p>
+                <a href="mailto:contact@servpix.com" class="mail-link">
+                    <i class="fa-regular fa-envelope"></i> contact@servpix.com
+                </a>
             </div>
         </div>
     </section>
@@ -697,35 +844,45 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-flex">
-                <div class="logo">
-                    <div class="logo-icon"><i class="fa-solid fa-table"></i></div>
-                    <span>Table Copy</span>
-                </div>
-                <div class="footer-links">
-                    <a href="#features">Features</a>
-                    <a href="#formats">Formats</a>
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="https://servpix.com" target="_blank">servpix.com</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Table Copy. Made with ❤️ by <a href="https://servpix.com" target="_blank">Belhadjay</a></p>
-            </div>
+            <p style="margin-bottom: 8px;">
+                by <a href="https://servpix.com" target="_blank">servpix.com</a>
+            </p>
+            <p style="font-size:0.85rem; color:#64748b;">
+                &copy; 2024 Table Copy Extension. All rights reserved.
+            </p>
         </div>
     </footer>
 
+    <!-- Payment Checkout Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+            <div style="font-size:2.5rem; color:#f59e0b; margin-bottom:12px;"><i class="fa-solid fa-crown"></i></div>
+            <h3 style="font-size:1.5rem; font-weight:800; margin-bottom:8px;">Unlock PRO Lifetime</h3>
+            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:24px;">
+                One-time payment of <strong>$9</strong> for lifetime access to Excel, JSON, Markdown, and Sheets export.
+            </p>
+            <a href="mailto:contact@servpix.com?subject=Purchase%20Table%20Copy%20PRO%20Lifetime&body=Hello%20Servpix%20Team%2C%20I%20would%20like%20to%20get%20access%20to%20Table%20Copy%20PRO." class="btn btn-pro" style="width:100%; padding:14px; font-size:1rem;">
+                <i class="fa-solid fa-credit-card"></i> Pay $9 via Stripe / Email
+            </a>
+            <p style="font-size:0.8rem; color:#64748b; margin-top:14px;">Instant activation via contact@servpix.com</p>
+        </div>
+    </div>
+
     <script>
-        // Accept button logic
-        document.getElementById('acceptBtn').addEventListener('click', function() {
-            if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-                chrome.storage.local.set({ privacyAgreed: true, date: new Date().toISOString() }, function() {
-                    console.log('Saved privacy agreement.');
-                });
+        function openPaymentModal() {
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+        window.onclick = function(e) {
+            const modal = document.getElementById('paymentModal');
+            if (e.target === modal) {
+                modal.style.display = 'none';
             }
-            this.innerHTML = '<i class="fa-solid fa-award"></i> Thank you! Policy Accepted Successfully';
-            this.classList.add('accepted');
-        });
+        }
     </script>
+
 </body>
 </html>
