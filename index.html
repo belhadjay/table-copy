@@ -614,11 +614,12 @@
             </div>
 
             <div class="nav-actions">
-                <button class="btn btn-pro" onclick="openPaymentModal()">
+                <a href="https://buy.stripe.com/7sY28kbkS29m6EI6eK0Fi05" target="_blank" class="btn btn-pro">
                     <i class="fa-solid fa-crown"></i> Get PRO
-                </button>
-                <a href="https://github.com/belhadjay/table-copy" target="_blank" class="btn btn-secondary">
-                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <!-- Install Now - Chrome Web Store link pending (Google Developer approval) -->
+                <a href="#" class="btn btn-secondary">
+                    <i class="fa-brands fa-chrome"></i> Install Now
                 </a>
             </div>
         </div>
@@ -638,11 +639,12 @@
             </p>
 
             <div class="hero-ctas">
-                <button class="btn btn-pro btn-lg" style="padding: 14px 28px; font-size: 1.05rem;" onclick="openPaymentModal()">
+                <a href="https://buy.stripe.com/7sY28kbkS29m6EI6eK0Fi05" target="_blank" class="btn btn-pro btn-lg" style="padding: 14px 28px; font-size: 1.05rem;">
                     <i class="fa-solid fa-bolt"></i> Get PRO Lifetime Access ($9)
-                </button>
-                <a href="#pricing" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.05rem;">
-                    <i class="fa-solid fa-download"></i> Use Free Version
+                </a>
+                <!-- Install Now - Chrome Web Store link pending (Google Developer approval) -->
+                <a href="#" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.05rem;">
+                    <i class="fa-brands fa-chrome"></i> Install Now
                 </a>
             </div>
 
@@ -762,7 +764,7 @@
                         </ul>
                     </div>
 
-                    <a href="https://github.com/belhadjay/table-copy" target="_blank" class="btn btn-secondary" style="width: 100%;">
+                    <a href="#" class="btn btn-secondary" style="width: 100%;">
                         <i class="fa-brands fa-chrome"></i> Install Free Extension
                     </a>
                 </div>
@@ -786,9 +788,9 @@
                         </ul>
                     </div>
 
-                    <button class="btn btn-pro" style="width: 100%; font-size:1.05rem;" onclick="openPaymentModal()">
+                    <a href="https://buy.stripe.com/7sY28kbkS29m6EI6eK0Fi05" target="_blank" class="btn btn-pro" style="width: 100%; font-size:1.05rem;">
                         <i class="fa-solid fa-crown"></i> Buy PRO Lifetime ($9)
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -800,30 +802,68 @@
             <div class="section-header">
                 <span class="section-tag">Privacy & Security</span>
                 <h2 class="section-title">Official Privacy Policy</h2>
-                <p style="color:var(--text-muted);">Committed to absolute privacy. Compliant with Google Developer Program Policies.</p>
+                <p style="color:var(--text-muted);">Committed to transparency. Compliant with Google Developer Program Policies.</p>
             </div>
 
             <div class="privacy-box">
+
                 <div class="privacy-item">
-                    <h3><i class="fa-solid fa-circle-check"></i> 1. Zero Data Collection</h3>
-                    <p>Table Copy does <strong>NOT</strong> collect, transmit, store, or sell any personal data. We do not track your browsing history, visited websites, cookies, or IP addresses. Everything stays 100% on your device.</p>
+                    <h3><i class="fa-solid fa-calendar"></i> Effective Date & Contact</h3>
+                    <p><strong>Effective Date:</strong> November 23, 2024 &nbsp;|&nbsp; <strong>Version:</strong> 1.0<br>
+                    This Privacy Policy applies to the <strong>Table Copy</strong> Chrome Extension ("the Extension") by Servpix.<br>
+                    For privacy questions or data requests, contact us at <a href="mailto:contact@servpix.com" style="color:#a5b4fc;">contact@servpix.com</a>.</p>
                 </div>
 
                 <div class="privacy-item">
-                    <h3><i class="fa-solid fa-key"></i> 2. Chrome Permissions Justification</h3>
-                    <p>The extension requests only minimal permissions required to extract tables:</p>
+                    <h3><i class="fa-solid fa-circle-check"></i> 1. Data We Collect & Why</h3>
+                    <p>We collect <strong>only</strong> the minimum data required for the Extension to function:</p>
                     <ul>
-                        <li><code>activeTab</code>: Accesses the current web page only when you open the extension to parse visible tables.</li>
-                        <li><code>scripting</code>: Executes local JavaScript to highlight and format table cells for export.</li>
-                        <li><code>clipboardWrite</code>: Copies the formatted table data directly to your system clipboard.</li>
-                        <li><code>storage</code>: Remembers your preferred export format (CSV/Excel) locally inside Chrome.</li>
+                        <li><strong>Table data (Free features):</strong> Extracted locally in your browser (copy/CSV). <strong>Never sent to any server.</strong></li>
+                        <li><strong>Table data (PRO features only):</strong> When you use JSON, Markdown, or Google Sheets export, the table matrix is sent to our rendering server (<code>tablecopy-license.aymene-belg.workers.dev</code>) for processing and returned to you. <strong>We do not store this data</strong> — it exists only in server memory for the duration of the request and is immediately discarded.</li>
+                        <li><strong>License verification:</strong> Your license key, a randomly generated device ID, and a device hash are sent to our license server to verify your PRO subscription status.</li>
                     </ul>
                 </div>
 
                 <div class="privacy-item">
-                    <h3><i class="fa-solid fa-shield-cat"></i> 3. Client-Side Sandbox</h3>
-                    <p>All processing algorithms execute entirely in your local browser environment. No table data is ever transmitted over network connections to our servers or third-party analytical vendors.</p>
+                    <h3><i class="fa-solid fa-key"></i> 2. Chrome Permissions Justification</h3>
+                    <p>The Extension requests only the permissions required for its core functionality:</p>
+                    <ul>
+                        <li><code>activeTab</code> — Accesses the current web page only when you interact with the Extension to detect and extract visible tables.</li>
+                        <li><code>scripting</code> — Injects JavaScript to highlight and format table cells for export.</li>
+                        <li><code>clipboardWrite</code> — Copies the formatted table data directly to your system clipboard.</li>
+                        <li><code>storage</code> — Saves your license status (isPro, licenseKey, deviceId) locally inside Chrome's sync storage so you don't have to re-enter your license on every page.</li>
+                        <li><code>host_permissions: https://*.workers.dev/*</code> — Required to communicate with our Cloudflare Worker for PRO render requests (JSON, Markdown, Sheets) and license verification.</li>
+                    </ul>
                 </div>
+
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-shield-cat"></i> 3. No Browsing History Tracking</h3>
+                    <p>We do <strong>not</strong> track, log, or store your browsing history, visited URLs, cookies, IP addresses, or any personal identification. The Extension has no analytics, no tracking pixels, and no third-party cookies.</p>
+                </div>
+
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-database"></i> 4. Data Retention & Storage</h3>
+                    <ul>
+                        <li><strong>Locally (Chrome Sync):</strong> Your license key, device ID, device hash, and PRO status are stored in <code>chrome.storage.sync</code> to keep you logged in. Remove the Extension or clear Chrome sync data to delete this.</li>
+                        <li><strong>Server-side:</strong> Table data sent for PRO rendering is held in volatile memory only and discarded after the response is sent. License records (license key, device ID, activation date) are retained to provide ongoing service access.</li>
+                    </ul>
+                </div>
+
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-credit-card"></i> 5. Payments</h3>
+                    <p>All payments for PRO Lifetime licenses are processed securely by <strong>Stripe</strong> (<a href="https://stripe.com/privacy" target="_blank" style="color:#a5b4fc;">stripe.com/privacy</a>). We never collect, process, or store your credit card or payment details — Stripe handles everything.</p>
+                </div>
+
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-lock"></i> 6. Security</h3>
+                    <p>All PRO render communication uses HTTPS/TLS encryption. Your license key is validated server-side on every PRO request and cannot be faked from the client.</p>
+                </div>
+
+                <div class="privacy-item">
+                    <h3><i class="fa-solid fa-envelope"></i> 7. Contact & Data Requests</h3>
+                    <p>To request data deletion, ask questions, or exercise any privacy rights, email us at <a href="mailto:contact@servpix.com" style="color:#a5b4fc;">contact@servpix.com</a>. We respond within 72 hours.</p>
+                </div>
+
             </div>
         </div>
     </section>
@@ -853,35 +893,8 @@
         </div>
     </footer>
 
-    <!-- Payment Checkout Modal -->
-    <div class="modal-overlay" id="paymentModal">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closePaymentModal()">&times;</button>
-            <div style="font-size:2.5rem; color:#f59e0b; margin-bottom:12px;"><i class="fa-solid fa-crown"></i></div>
-            <h3 style="font-size:1.5rem; font-weight:800; margin-bottom:8px;">Unlock PRO Lifetime</h3>
-            <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:24px;">
-                One-time payment of <strong>$9</strong> for lifetime access to Excel, JSON, Markdown, and Sheets export.
-            </p>
-            <a href="mailto:contact@servpix.com?subject=Purchase%20Table%20Copy%20PRO%20Lifetime&body=Hello%20Servpix%20Team%2C%20I%20would%20like%20to%20get%20access%20to%20Table%20Copy%20PRO." class="btn btn-pro" style="width:100%; padding:14px; font-size:1rem;">
-                <i class="fa-solid fa-credit-card"></i> Pay $9 via Stripe / Email
-            </a>
-            <p style="font-size:0.8rem; color:#64748b; margin-top:14px;">Instant activation via contact@servpix.com</p>
-        </div>
-    </div>
-
     <script>
-        function openPaymentModal() {
-            document.getElementById('paymentModal').style.display = 'flex';
-        }
-        function closePaymentModal() {
-            document.getElementById('paymentModal').style.display = 'none';
-        }
-        window.onclick = function(e) {
-            const modal = document.getElementById('paymentModal');
-            if (e.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
+        // Payment now goes directly to Stripe via Get PRO buttons (no modal needed).
     </script>
 
 </body>
